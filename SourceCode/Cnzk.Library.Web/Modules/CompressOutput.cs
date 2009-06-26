@@ -40,7 +40,8 @@ namespace Cnzk.Library.Web.Modules {
 
             if (Enabled && !string.IsNullOrEmpty(ext) && app.Response.ContentType.Contains("text") && (
                 ext.Equals(".aspx", StringComparison.OrdinalIgnoreCase)
-                || ext.Equals(".asmx", StringComparison.OrdinalIgnoreCase))) {
+                || ext.Equals(".asmx", StringComparison.OrdinalIgnoreCase)
+                || ext.Equals(".ashx", StringComparison.OrdinalIgnoreCase))) {
 
                 string acceptEncoding = app.Request.Headers["Accept-Encoding"];
                 Stream prevUncompressedStream = app.Response.Filter;
