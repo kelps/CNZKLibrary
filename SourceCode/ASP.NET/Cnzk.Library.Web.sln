@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cnzk.Library.Web", "Cnzk.Library.Web\Cnzk.Library.Web.csproj", "{79982015-A0DF-4D5A-B10A-B65B7CB69454}"
 EndProject
 Global
