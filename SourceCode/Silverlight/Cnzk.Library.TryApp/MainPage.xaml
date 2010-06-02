@@ -9,7 +9,7 @@
              mc:Ignorable="d">
 
     <Grid x:Name="LayoutRoot"
-          Background="White">
+          Background="Orange">
         <ListBox x:Name="listBox"
                  HorizontalAlignment="Left"
                  Width="100"

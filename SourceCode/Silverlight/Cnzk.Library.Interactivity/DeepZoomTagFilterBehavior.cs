@@ -8,6 +8,7 @@ using System.Linq;
 using System.Net;
 using System.Xml.Linq;
 using System.Windows.Media;
+using System.Diagnostics;
 
 namespace Cnzk.Library.Interactivity {
     public class DeepZoomTagFilterBehavior : Behavior<MultiScaleImage> {
@@ -111,15 +112,8 @@ namespace Cnzk.Library.Interactivity {
         private void ArrangeImages(IList<MultiScaleSubImage> images, Storyboard anim) {
             var msi = AssociatedObject;
             if (msi != null && images != null && images.Count > 0) {
-                var wmsi = msi.ActualWidth;
-                var hmsi = msi.ActualHeight;
+                var ar = msi.ActualWidth / msi.ActualHeight;
                 if (images.Count > 1) {//se houver mais de 1 imagem
-                    var amsi = Math.Sqrt(wmsi * wmsi + hmsi * hmsi); //calcula hipotenusa do deepzoom
-                    var sw = wmsi / amsi;
-                    var sh = hmsi / amsi;
-                    var areamsi = wmsi * hmsi;
-                    var shw = amsi * amsi * sw * sh / areamsi;
-
                     double totalImg = 0;
                     foreach (var i in images) {
                         totalImg += i.AspectRatio;
@@ -127,32 +121,45 @@ namespace Cnzk.Library.Interactivity {
                         i.ViewportWidth = h;
                     }
 
-                    var aview = Math.Sqrt(shw * totalImg / (sw * sh));
-                    var wview = sw * aview; //essa é a largura máxima de cada linha
+                    var linhas = (int)Math.Floor(Math.Sqrt(totalImg / ar));
+                    double[] linhassizes = new double[linhas];
+                    int j = 0;
+                    double totalLinha;
 
-                    double totalLinha = 0;
-                    double linha = 0;
                     foreach (var i in images) {
-                        if (totalLinha + i.ViewportWidth > wview) {
-                            totalLinha = 0;
-                            linha++;
-                        }
-                        CreatePointAnimation(anim, i, new Point(-totalLinha * i.ViewportWidth, -linha * i.ViewportWidth));
-                        totalLinha += i.AspectRatio;
+                        j = GetSmallerLineIndex(linhassizes);
+                        totalLinha = linhassizes[j];
+                        CreatePointAnimation(anim, i, new Point(-totalLinha * i.ViewportWidth, -j * i.ViewportWidth));
+                        linhassizes[j] += i.AspectRatio;
                     }
 
-                    msi.ViewportWidth = wview * 1.1;
+                    msi.ViewportWidth = linhas * ar;
                 } else {// se houver apenas 1 imagem
                     var i = images[0];
 
-                    i.ViewportWidth = Math.Max(i.AspectRatio, 2/i.AspectRatio);
+                    i.ViewportWidth = Math.Max(ar, i.AspectRatio);
                     CreatePointAnimation(anim, i, new Point());
 
-                    msi.ViewportWidth = 1;
+                    msi.ViewportWidth = Math.Max(ar, i.AspectRatio);
                 }
             }
             CreatePointAnimation(anim, msi, new Point());
             anim.Begin();
+        }
+
+        private static int GetSmallerLineIndex(double[] array) {
+            int result = 0;
+            double smaller = 0;
+
+            smaller = array[0];
+            for (int i = 0; i < array.Length; i++) {
+                if (array[i] < smaller) {
+                    result = i;
+                    smaller = array[i];
+                }
+            }
+
+            return result;
         }
 
         private void CreatePointAnimation(Storyboard anim, DependencyObject target, Point newPoint) {
