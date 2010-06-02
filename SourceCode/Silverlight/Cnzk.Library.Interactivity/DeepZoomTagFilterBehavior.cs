@@ -30,6 +30,7 @@ namespace Cnzk.Library.Interactivity {
         }
 
         XElement Metadata;
+        bool imageTagsloaded = false;
 
         void AssociatedObject_ImageOpenSucceeded(object sender, System.Windows.RoutedEventArgs e) {
             SetImagesTags();
@@ -40,30 +41,34 @@ namespace Cnzk.Library.Interactivity {
             var uri = Source;
             if (msi != null && uri != null) {
                 msi.Source = new DeepZoomImageTileSource(uri);
-                SetImagesTags();
             }
+            SetImagesTags();
         }
 
         private void SetImagesTags() {
             var msi = AssociatedObject;
-            if (msi != null && msi.SubImages != null && Metadata != null) {
-                var images = AssociatedObject.SubImages;
-                var availableTags = new List<string>();
-                var info = from t in Metadata.Descendants("Image")
-                           select new {
-                               Tag = t.Element("Tag").Value,
-                               ZOrder = int.Parse(t.Element("ZOrder").Value) - 1
-                           };
-                foreach (var i in info) {
-                    if (!string.IsNullOrWhiteSpace(i.Tag)) {
-                        var tags = new List<string>(i.Tag.ToLowerInvariant().Split(','));
-                        foreach (var t in tags) {
-                            if (!availableTags.Contains(t)) availableTags.Add(t);
+            try {
+                if (msi != null && msi.SubImages != null && msi.SubImages.Count > 1 && Metadata != null) {
+                    var images = AssociatedObject.SubImages;
+                    var availableTags = new List<string>();
+                    var info = from t in Metadata.Descendants("Image")
+                               select new {
+                                   Tag = t.Element("Tag").Value,
+                                   ZOrder = int.Parse(t.Element("ZOrder").Value) - 1
+                               };
+                    foreach (var i in info) {
+                        if (!string.IsNullOrWhiteSpace(i.Tag)) {
+                            var tags = new List<string>(i.Tag.ToLowerInvariant().Split(','));
+                            foreach (var t in tags) {
+                                if (!availableTags.Contains(t)) availableTags.Add(t);
+                            }
+                            SetTags(images[i.ZOrder], tags);
                         }
-                        SetTags(images[i.ZOrder], tags);
                     }
+                    AvailableTags = availableTags.ToArray();
+                    imageTagsloaded = true;
                 }
-                AvailableTags = availableTags.ToArray();
+            } finally {
                 FilterTiles();
             }
         }
@@ -71,7 +76,7 @@ namespace Cnzk.Library.Interactivity {
         private void FilterTiles() {
             var o = AssociatedObject;
             if (o != null && o.SubImages != null) {
-                var filter = Filter;
+                var filter = (imageTagsloaded) ? Filter : null;
                 var images = o.SubImages;
                 var visibleImages = new List<MultiScaleSubImage>();
                 var anim = new Storyboard() { Duration = AnimationDuration };
