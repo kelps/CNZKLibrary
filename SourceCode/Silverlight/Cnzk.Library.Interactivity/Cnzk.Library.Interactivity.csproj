@@ -60,6 +60,7 @@
     <Compile Include="DeepZoomInitializer.cs" />
     <Compile Include="DeepZoomTagFilterBehavior.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ToggleFullScreenAction.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <ProjectExtensions>
