@@ -11,11 +11,22 @@
     <Grid x:Name="LayoutRoot"
           Height="600"
           Width="545">
-        <Button Content="All"
+        <Button Content="FullScreen"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 Width="100"
                 Margin="10,10,0,0">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="Click">
+                    <cnzk:ToggleFullScreenAction StaysFullScreenWhenUnfocused="True" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </Button>
+        <Button Content="All"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Width="100"
+                Margin="10,40,0,0">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="Click">
                     <ei:ChangePropertyAction TargetObject="{Binding ElementName=listBox}"
@@ -27,7 +38,7 @@
                  HorizontalAlignment="Left"
                  FontFamily="Trebuchet MS"
                  Width="100"
-                 Margin="10,40,0,365"
+                 Margin="10,70,0,365"
                  ItemsSource="{Binding AvailableTags, ElementName=tagfilter}" />
         <Border HorizontalAlignment="Left"
                 Height="225"
