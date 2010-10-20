@@ -77,7 +77,7 @@ namespace Cnzk.Library.Web.Handlers {
         #endregion
 
         #region Method GetRequestedSize(HttpContext)
-        protected override Size GetRequestedSize(HttpContext context) {
+        protected override Size GetRequestedSize(HttpContext context, Image original) {
             Size result = new Size();
             string requestedFileName = Path.GetFileName(context.Request.CurrentExecutionFilePath);
             Match m = ExecuteRegEx(UrlValidationPattern, requestedFileName);
