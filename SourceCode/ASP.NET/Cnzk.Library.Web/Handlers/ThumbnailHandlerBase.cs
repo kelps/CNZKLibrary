@@ -32,7 +32,7 @@ namespace Cnzk.Library.Web.Handlers {
         /// </summary>
         /// <param name="context">HttpContext of the current request.</param>
         /// <returns>Requested size for the output image.</returns>
-        protected abstract Size GetRequestedSize(HttpContext context);
+        protected abstract Size GetRequestedSize(HttpContext context, Image original);
 
         /// <summary>
         /// Gets the content type for the output file.
@@ -73,7 +73,7 @@ namespace Cnzk.Library.Web.Handlers {
 
                 if (img != null) {
                     using (img) {
-                        Size requestedSize = GetRequestedSize(context);
+                        Size requestedSize = GetRequestedSize(context, img);
                         finalImage = GetFinalImage(context, img, requestedSize);
                         using (finalImage) {
                             SetFileDependency(context);
