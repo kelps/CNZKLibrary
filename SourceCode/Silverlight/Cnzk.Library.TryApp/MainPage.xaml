@@ -6,22 +6,78 @@
              xmlns:cnzk="http://schemas.cnzk.com.br/library"
              xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
              x:Class="Cnzk.Library.TryApp.MainPage"
+             TextOptions.TextHintingMode="Animated"
              mc:Ignorable="d">
 
     <Grid x:Name="LayoutRoot"
-          Height="600"
-          Width="545">
-        <Slider x:Name="zoom"
+          Height="500"
+          Width="500">
+        <!--Slider x:Name="zoom"
                 VerticalAlignment="Top" Maximum="1.5" Minimum="0.2" Value="1" />
         <Rectangle Width="200"
                    Height="200" Fill="Red">
             <i:Interaction.Behaviors>
-                <cnzk:AnimatedScaleBehavior ScaleValue="{Binding Value, ElementName=zoom}" >
+                <cnzk:AnimatedScaleBehavior ScaleValue="{Binding Value, ElementName=zoom}" Duration="0:0:1" >
                 	<cnzk:AnimatedScaleBehavior.Easing>
-                		<CircleEase EasingMode="EaseInOut"/>
+                		<CubicEase EasingMode="EaseInOut"/>
                 	</cnzk:AnimatedScaleBehavior.Easing>
                 </cnzk:AnimatedScaleBehavior>
             </i:Interaction.Behaviors>
-        </Rectangle>
+        </Rectangle-->
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="60" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="ClickCountTrigger live sample" Margin="20" FontSize="20" ToolTipService.ToolTip="Sample code for creating the double click button below" />
+
+        <TextBlock TextWrapping="Wrap"
+                   Grid.Row="1"
+                   Margin="20,0"
+                   VerticalAlignment="Top">
+            <Run>This sample shows the ClickCount Trigger in action.</Run>
+            <LineBreak/>
+            <LineBreak />
+            <Run>Both buttons below have the ToggleFullScreenAction attached to them, using the ClickCountTrigger as their trigger.</Run>
+            <LineBreak />
+            <LineBreak />
+            <Run>The first button has the ClickCount property of the ClickCountTrigger set to 2, so the Action only gets invoked if you double click that button.</Run>
+            <LineBreak />
+            <LineBreak />
+            <Run>The second button has the ClickCount property of the ClickCountTrigger set to 3, so the Action only gets invoked if you triple click that button.</Run>
+            <LineBreak />
+            <LineBreak />
+            <Run>This trigger works with any UIElement, not just buttons. The default value for the ClickCount property is 2. This trigger works even if the MouseLeftButtonUp event has already been handled for that control.</Run>
+        </TextBlock>
+        
+        <Image Grid.Row="2" Source="/Images/ClickCountSample.jpg" Stretch="None"/>
+
+        <Button Content="Double-Click to Toggle Full Screen"
+                Grid.Row="3"
+                Margin="20,0"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Left">
+            <i:Interaction.Triggers>
+                <cnzk:ClickCountTrigger ClickCount="2">
+                    <cnzk:ToggleFullScreenAction />
+                </cnzk:ClickCountTrigger>
+            </i:Interaction.Triggers>
+        </Button>
+
+        <Button Content="Triple-Click to Toggle Full Screen"
+                Grid.Row="3"
+                Margin="20,0"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Right">
+            <i:Interaction.Triggers>
+                <cnzk:ClickCountTrigger ClickCount="3">
+                    <cnzk:ToggleFullScreenAction />
+                </cnzk:ClickCountTrigger>
+            </i:Interaction.Triggers>
+        </Button>
+
     </Grid>
 </UserControl>

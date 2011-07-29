@@ -82,7 +82,7 @@ namespace Cnzk.Library.Interactivity {
 
         // Using a DependencyProperty as the backing store for Easing.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty EasingProperty =
-            DependencyProperty.Register("Easing", typeof(IEasingFunction), typeof(AnimatedScaleBehavior), new PropertyMetadata(OnEasingChanged));
+            DependencyProperty.Register("Easing", typeof(IEasingFunction), typeof(AnimatedScaleBehavior), new PropertyMetadata(new CubicEase() { EasingMode = System.Windows.Media.Animation.EasingMode.EaseInOut }, OnEasingChanged));
 
         private static void OnEasingChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e) {
             var o = sender as AnimatedScaleBehavior;
